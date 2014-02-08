@@ -1,0 +1,41 @@
+hw1a.jff:
+accept 0
+accept 00
+accept 010
+reject 100
+reject 1
+reject 
+
+hw1b.jff:
+accept 0
+accept 00
+accept 110
+reject 001
+reject 1
+reject 
+
+hw1c.jff:
+accept 11
+accept 0101
+accept 0001
+reject 0
+reject 1
+accept 
+
+hw1d.jff:
+accept 00
+accept 0110
+accept 0100
+reject 010
+reject 0
+reject 
+
+hw1e.jff:
+accept 101011000
+accept 110111010001
+accept 011
+accept 011110001011101
+reject 01111000101110
+reject 011110001011100
+reject 111111
+reject 1101
