@@ -33,36 +33,36 @@ public class AllAssignmentsGrader {
 			return;
 		}
 		String assignment = args[0];
-		File studentsFile = new File(args[1]);
-		File accountsFile = new File(args[2]);
-		File testsFile = new File(args[3]);
-		File submissionsDir = new File(args[4]);
-		if (!studentsFile.canRead()) {
+		File students_file = new File(args[1]);
+		File accounts_file = new File(args[2]);
+		File tests_file = new File(args[3]);
+		File submissions_dir = new File(args[4]);
+		if (!students_file.canRead()) {
 			System.err.println("can't read gradesource_students_file");
 			return;
 		}
-		if (!accountsFile.canRead()) {
+		if (!accounts_file.canRead()) {
 			System.err.println("can't read ACMS_accounts_file");
 			return;
 		}
-		if (!testsFile.canRead()) {
+		if (!tests_file.canRead()) {
 			System.err.println("can't read test_cases_file");
 			return;
 		}
-		if (!submissionsDir.canRead()) {
+		if (!submissions_dir.canRead()) {
 			System.err.println("can't read directory_of_submissions");
 			return;
 		}
 		
 		AssignmentGrader grader = getGrader(assignment);
 		
-		HashMap<String, String> ar[] = createStudentsToIds(studentsFile);
+		HashMap<String, String> ar[] = createStudentsToIds(students_file);
 		HashMap<String, String> studentsToIds = ar[0];
 		HashMap<String, String> idsToRealNames = ar[1];
-		HashMap<String, String> accountsToStudents = createAccountsToStudents(accountsFile);;
-		ArrayList<TestSuite> testSuites = TestSuite.createTestSuites(testsFile);
+		HashMap<String, String> accountsToStudents = createAccountsToStudents(accounts_file);;
+		ArrayList<ProblemGrader> problem_graders = ProblemGrader.createProblemGraders(tests_file);
 		HashMap<String, String> namesToScoresAndFeedback = gradeAllAssignments(
-				grader, submissionsDir, studentsToIds, accountsToStudents, testSuites);
+				grader, submissions_dir, studentsToIds, accountsToStudents, problem_graders);
 		ArrayList<String> rows = new ArrayList<String>();
 		for (Entry<String, String> entry : studentsToIds.entrySet()) {
 			String name = entry.getKey();
@@ -179,7 +179,7 @@ public class AllAssignmentsGrader {
 			File submissionsDir, 
 			HashMap<String, String> studentsToIds,
 			HashMap<String, String> accountsToStudents,
-			ArrayList<TestSuite> testSuites) {
+			ArrayList<ProblemGrader> problem_graders) {
 		File[] submissions = submissionsDir.listFiles();
 		Arrays.sort(submissions);
 		HashMap<String, String> result = new HashMap<String, String>();
@@ -202,7 +202,7 @@ public class AllAssignmentsGrader {
 				}
 			}
 			String scoreAndFeedback =
-					grader.gradeAssignment(submission, testSuites);
+					grader.gradeAssignment(submission, problem_graders);
 			if (id != null){
 				result.put(name, scoreAndFeedback);
 			}

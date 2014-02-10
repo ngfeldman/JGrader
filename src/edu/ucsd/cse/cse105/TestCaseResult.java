@@ -1,15 +1,15 @@
 package edu.ucsd.cse.cse105;
 
-public class TestCaseResult {
-	private TestCase tc;
-	boolean actual;
+public class TestCaseResult<R> {
+	private TestCase<R> tc;
+	R actual_result;
 	
-	public TestCaseResult(TestCase tc, boolean actual) {
+	public TestCaseResult(TestCase<R> tc, R actual_result) {
 		this.tc = tc;
-		this.actual = actual;
+		this.actual_result = actual_result;
 	}
 	
-	public TestCase getTestCase() {
+	public TestCase<R> getTestCase() {
 		return tc;
 	}
 	
@@ -17,16 +17,16 @@ public class TestCaseResult {
 		return tc.getTestString();
 	}
 	
-	public boolean getExpectedResult() {
-		return tc.accept();
+	public R getExpectedResult() {
+		return tc.getExpectedResult();
 	}
 	
-	public boolean getActualResult() {
-		return actual;
+	public R getActualResult() {
+		return actual_result;
 	}
 	
 	public boolean isCorrect() {
-		return (tc.accept() == actual);
+		return (tc.getExpectedResult().equals(actual_result));
 	}
 	
 	public String getFeedback() {
@@ -34,9 +34,9 @@ public class TestCaseResult {
 		String feedback = test_string.equals("") ? "empty string" : test_string;
 		feedback += isCorrect() ? " correct " : " incorrect ";
 		feedback += "expected ";
-		feedback += tc.accept() ? "accept" : "reject";
+		feedback += getExpectedResult();
 		feedback += " got ";
-		feedback += actual ? "accept" : "reject";
+		feedback += getActualResult();
 		return feedback;
 	}
 }
