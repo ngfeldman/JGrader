@@ -1,0 +1,19 @@
+package edu.ucsd.cse.cse105.test
+
+hw2b.jff:
+DecisionAutomaton
+9 states
+	Reject
+0	Accept
+1011010	Accept
+1010001	Reject
+010	Reject
+010110	Reject
+110	Accept
+00110	Accept
+1010010101	Reject
+0101100110	Reject
+00101101010000011101	Reject
+001	Accept
+001100	Accept
+00111001	Accept
