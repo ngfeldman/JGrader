@@ -1,5 +1,6 @@
 package edu.ucsd.cse.cse105;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -7,11 +8,12 @@ public abstract class TestSuiteGrader<R> extends ProblemGrader implements Iterab
 
 	protected ArrayList<TestCase<R>> test_cases;
 	
-	public TestSuiteGrader(String file_name, String type, String[] test_info, int line_number) {
-		super(file_name, type, test_info, line_number);
-		}
+	public TestSuiteGrader(String file_name, File tests_file, String[] test_info, int line_number) {
+		super(file_name, tests_file, test_info, line_number);
+	}
 	
-	protected void onInitialize(String[] test_info, int line_number) {
+	@Override
+	protected void onInstantiate(String[] test_info, int line_number) {
 		test_cases = loadTestCases(test_info, line_number);
 	}
 
@@ -71,6 +73,9 @@ public abstract class TestSuiteGrader<R> extends ProblemGrader implements Iterab
 				return tc;
 		return null;
 	}
+	
+	@Override
+	public abstract TestSuiteResult<R> grade(File file);
 	
 	public abstract R stringToR (String expected_result_str);
 }

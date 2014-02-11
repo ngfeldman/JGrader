@@ -6,8 +6,8 @@ public class DecisionResult extends TestCaseResult<Boolean> {
 	}
 	
 	public String getFeedback() {
-		String test_string = getTestString();
-		String feedback = test_string.equals("") ? "empty string" : test_string;
+		String test_string = replaceEmptyStringWithEpsilon(getTestString());
+		String feedback = test_string;
 		feedback += isCorrect() ? " correct " : " incorrect ";
 		feedback += "expected ";
 		feedback += getExpectedResult() ? "accept" : "reject";

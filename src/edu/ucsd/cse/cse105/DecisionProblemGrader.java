@@ -1,10 +1,12 @@
 package edu.ucsd.cse.cse105;
 
+import java.io.File;
+
 
 public abstract class DecisionProblemGrader extends TestSuiteGrader<Boolean> {
 
-	public DecisionProblemGrader(String file_name, String type, String[] test_info, int line_number) {
-		super(file_name, type, test_info, line_number);
+	public DecisionProblemGrader(String file_name, File tests_file, String[] test_info, int line_number) {
+		super(file_name, tests_file, test_info, line_number);
 	}
 	
 	@Override

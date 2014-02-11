@@ -17,3 +17,35 @@ DecisionAutomaton
 001	Accept
 001100	Accept
 00111001	Accept
+
+mealy.jff:
+FST
+011	!
+100	211
+101	2
+110	22
+111	222
+
+HW3p1.rex:
+EGrep
+sample-email.txt
+reject
+reject
+reject
+accept
+reject
+reject
+accept
+accept
+accept
+accept
+accept
+accept
+reject
+reject
+reject
+reject
+reject
+accept
+accept
+accept

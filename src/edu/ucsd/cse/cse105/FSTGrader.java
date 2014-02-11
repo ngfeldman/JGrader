@@ -3,17 +3,18 @@ package edu.ucsd.cse.cse105;
 import java.io.File;
 import java.util.Arrays;
 
-public class DecisionAutomatonGrader extends DecisionProblemGrader {
+public class FSTGrader extends TestSuiteGrader<String> {
 
 	protected int expected_states;
 	
-	public DecisionAutomatonGrader(String file_name, File tests_file, String[] test_info, int line_number) {
+	public FSTGrader(String file_name, File tests_file, String[] test_info, int line_number) {
 		super(file_name, tests_file, test_info, line_number);
+		// TODO Auto-generated constructor stub
 	}
 
 	@Override
-	public DecisionAutomatonResult grade(File file) {
-		return new DecisionAutomatonResult(this, file);
+	public String stringToR(String expected_result_str) {
+		return expected_result_str;
 	}
 
 	@Override
@@ -25,9 +26,13 @@ public class DecisionAutomatonGrader extends DecisionProblemGrader {
 		}
 		super.onInstantiate(test_info, line_number);
 	}
-	
+
+	@Override
+	public FSTResult grade(File file) {
+		return new FSTResult(this, file);
+	}
+
 	public int getExpectedStates() {
 		return expected_states;
 	}
-	
 }

@@ -11,6 +11,8 @@ public abstract class DecisionProblemResult extends TestSuiteResult<Boolean> {
 	
 	@Override
 	protected void loadTestCaseResults() {
+		if (! isTestable())
+			return;
 		HashMap<String, DecisionResult> test_case_results = new HashMap<String, DecisionResult>();
 		for (TestCase<Boolean> tc : getProblemGrader())
 			test_case_results.put(tc.getTestString(), new DecisionResult(tc,test(tc)));

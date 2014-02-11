@@ -16,7 +16,7 @@ import file.XMLCodec;
 public class DecisionAutomatonResult extends DecisionProblemResult {
 	private boolean missing = true;
 	private boolean testable = false;
-	protected boolean wrong_type = true;
+	protected boolean wrong_type;
 	
 	protected int actual_states = 0;
 	
@@ -40,21 +40,30 @@ public class DecisionAutomatonResult extends DecisionProblemResult {
 			return;
 		}
 		
-		typeCheck(jff_obj);
+		if (jff_obj instanceof FiniteStateAutomaton
+				|| jff_obj instanceof PushdownAutomaton
+				|| jff_obj instanceof TuringMachine) {
+			testable = true;
+			automaton = (Automaton) jff_obj;
+			actual_states = automaton.getStates().length;
+		}
+		
+		typeCheck();
+		if (testable)
+			setSimulator();
 		loadTestCaseResults();
 	}
 
-	protected void typeCheck(Object jff_obj) {
-		if (! (jff_obj instanceof FiniteStateAutomaton
-				|| jff_obj instanceof PushdownAutomaton
-				|| jff_obj instanceof TuringMachine)) {
+	protected void typeCheck() {
+		if (isTestable())
+			wrong_type = false;
+		else {
+			wrong_type = true;
 			feedback_prelude += "\\n\t not a DecisionAutomaton";
-			return;
 		}
-		testable = true;
-		wrong_type = false;
-		automaton = (Automaton) jff_obj;
-		actual_states = automaton.getStates().length;
+	}
+	
+	protected void setSimulator() {
 		if (automaton instanceof FiniteStateAutomaton) {
 			sim = new FSAStepWithClosureSimulator(automaton);
 		}
@@ -89,6 +98,16 @@ public class DecisionAutomatonResult extends DecisionProblemResult {
 		return testable;
 	}
 	
+	@Override
+	public boolean isCorrect() {
+		return (! isWrongType()) && statesCorrect() && allCasesCorrect();
+	}
+	
+	public boolean statesCorrect() {
+		//TODO: implement functionality to grade based on number of states
+		return true;
+	}
+	
 	public boolean isWrongType() {
 		return wrong_type;
 	}
@@ -99,6 +118,11 @@ public class DecisionAutomatonResult extends DecisionProblemResult {
 	
 	public int getActualStates() {
 		return actual_states;
+	}
+	
+	@Override
+	public String getFeedback() {
+		return feedback_prelude + super.getFeedback();
 	}
 	
 	public DecisionAutomatonGrader getProblemGrader() {

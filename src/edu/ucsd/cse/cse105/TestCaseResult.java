@@ -29,14 +29,24 @@ public class TestCaseResult<R> {
 		return (tc.getExpectedResult().equals(actual_result));
 	}
 	
+	public static String replaceEmptyStringWithEpsilon(String str) {
+		if (str.equals(""))
+			return "ε";
+		else
+			return str;
+	}
+	
 	public String getFeedback() {
-		String test_string = getTestString();
-		String feedback = test_string.equals("") ? "empty string" : test_string;
+		String test_string = replaceEmptyStringWithEpsilon(getTestString());
+		String expected = replaceEmptyStringWithEpsilon(getExpectedResult().toString());
+		String actual = replaceEmptyStringWithEpsilon(getActualResult().toString());
+		
+		String feedback = test_string;
 		feedback += isCorrect() ? " correct " : " incorrect ";
 		feedback += "expected ";
-		feedback += getExpectedResult();
+		feedback += expected;
 		feedback += " got ";
-		feedback += getActualResult();
+		feedback += actual;
 		return feedback;
 	}
 }

@@ -12,9 +12,11 @@ public abstract class ProblemGrader {
 	private String file_name;
 	private String type;
 	
-	public ProblemGrader(String file_name, String type,  String[] test_info, int line_number) {
+	public ProblemGrader(String file_name, File tests_file, String[] test_info, int line_number) {
 		this.file_name = file_name;
-		this.type = type;
+		this.tests_file = tests_file;
+		this.type = this.getClass().getSimpleName();
+		this.type = this.type.substring(0, this.type.lastIndexOf("Grader"));
 		onInstantiate(test_info, line_number);
 	}
 
@@ -31,17 +33,15 @@ public abstract class ProblemGrader {
 	public abstract ProblemResult grade(File file);
 	
 	@SuppressWarnings("unchecked")
-	public static ProblemGrader createProblemGrader(String file_name, String type, String[] package_names, String[] test_info, int line_number){
+	public static ProblemGrader createProblemGrader(String file_name, File tests_file, String type, String[] package_names, String[] test_info, int line_number){
 		Class<? extends ProblemGrader> c = null;
 		try {
-			System.out.println(type+"Grader");
 			c = (Class<? extends ProblemGrader>) Class.forName(type+"Grader");
 		} catch (ClassNotFoundException e) {
 		}
 		if (c == null) {
 			for (int i = package_names.length-1; i >= 0; i--) {
 				String package_name = package_names[i];
-				System.out.println(package_name+"."+type+"Grader");
 				try {
 					c = (Class<? extends ProblemGrader>) Class.forName(package_name+"."+type+"Grader");
 					break;
@@ -60,14 +60,14 @@ public abstract class ProblemGrader {
 		}
 		Constructor<? extends ProblemGrader> cons;
 		try {
-			cons = (Constructor<? extends ProblemGrader>) c.getConstructor(String.class, String[].class, int.class);
+			cons = (Constructor<? extends ProblemGrader>) c.getConstructor(String.class, File.class, String[].class, int.class);
 		} catch (NoSuchMethodException e) {
 			throw new RuntimeException(c.getName() + " does not implement the required"
 					+ "constructor, taking (String file_name, String[] test_info, int line_number)");
 		}
 		ProblemGrader pg;
 		try {
-			pg = cons.newInstance(file_name, test_info, line_number);
+			pg = cons.newInstance(file_name, tests_file, test_info, line_number);
 		} catch (Exception e) {
 			if (e.getCause() instanceof RuntimeException)
 				throw (RuntimeException) e.getCause();
@@ -104,7 +104,7 @@ public abstract class ProblemGrader {
 				if (line.charAt(line.length()-1) == ':') {
 					if (test_info != null) {
 						String[] strs = new String[0];
-						list.add(createProblemGrader(file_name, type, package_names.toArray(strs),
+						list.add(createProblemGrader(file_name, tests_file, type, package_names.toArray(strs),
 								test_info.toArray(strs), test_info_starting_line_number));
 					}
 					file_name = line.substring(0,line.length()-1);
@@ -127,7 +127,7 @@ public abstract class ProblemGrader {
 			}
 			if (test_info != null) {
 				String[] strs = new String[0];
-				list.add(createProblemGrader(file_name, type, package_names.toArray(strs),
+				list.add(createProblemGrader(file_name, tests_file, type, package_names.toArray(strs),
 						test_info.toArray(strs), test_info_starting_line_number));
 			}
 			br.close();
@@ -135,9 +135,7 @@ public abstract class ProblemGrader {
 			System.err.println(e);
 			System.exit(1);
 		}
-		//TODO: consider making this part of the constructors. this is soooo much more succinct though.
-		for (ProblemGrader pg : list)
-			pg.tests_file = tests_file;
+
 		return list;
 	}
 }
