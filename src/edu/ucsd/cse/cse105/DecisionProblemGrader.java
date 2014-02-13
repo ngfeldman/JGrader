@@ -40,6 +40,9 @@ public abstract class DecisionProblemGrader extends TestSuiteGrader<Boolean> {
 	}
 	
 	@Override
+	public abstract DecisionProblemResult grade(File file);
+	
+	@Override
 	public Boolean stringToR(String expected_result_str) {
 		if (meansTrue(expected_result_str))
 			return new Boolean(true);
