@@ -31,11 +31,13 @@ public abstract class TestSuiteResult<R> extends ProblemResult implements Iterab
 	
 	@Override
 	public String getFeedback() {
-		String feedback = "";
+		String feedback = super.getFeedback();
 		if (isTestable()) {
-			for (TestCase<R> tc : getProblemGrader())
-				feedback += "\\n\t"
-						+ test_case_results.get(tc.getTestString()).getFeedback();
+			for (TestCase<R> tc : getProblemGrader()) {
+				String test_string = tc.getTestString();
+				TestCaseResult<R> tcr = test_case_results.get(test_string);
+				feedback += "\\n\t" + tcr.getFeedback();
+			}
 		}
 		return feedback;
 	}
@@ -147,6 +149,11 @@ public abstract class TestSuiteResult<R> extends ProblemResult implements Iterab
 			if (! (tcr.isCorrect() || test_strings_set.contains(tcr.getTestString())))
 					return false;
 		return true;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public int size() {
+		return ((TestSuiteGrader<R>) problem_grader).size();
 	}
 	
 	/**

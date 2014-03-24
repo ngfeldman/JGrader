@@ -201,6 +201,7 @@ public class AllAssignmentsGrader {
 					System.err.println("No id for " + name + " with account "+ account);
 				}
 			}
+			System.err.println("Now grading " + account + " " + name);
 			String scoreAndFeedback =
 					grader.gradeAssignment(submission, problem_graders);
 			if (id != null){
@@ -217,10 +218,18 @@ public class AllAssignmentsGrader {
 	}
 	
 	public static AssignmentGrader getGrader(String assignment) {
-		if (assignment.equalsIgnoreCase("hw1"))
-			return new HW1Grader();
-		if (assignment.equalsIgnoreCase("hw2"))
-			return new HW2Grader();
+		//if (assignment.equalsIgnoreCase("hw1"))
+		//	return new HW1Grader();
+		//if (assignment.equalsIgnoreCase("hw2"))
+		//	return new HW2Grader();
+		if (assignment.equalsIgnoreCase("hw3"))
+			return new HW3Grader();
+		if (assignment.equalsIgnoreCase("hw4"))
+			return new HW4Grader();
+		if (assignment.equalsIgnoreCase("hw5"))
+			return new HW5Grader();
+		if (assignment.equalsIgnoreCase("hw6"))
+			return new HW6Grader();
 		return null;
 	}
 }

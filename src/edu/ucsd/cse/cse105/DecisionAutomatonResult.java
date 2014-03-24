@@ -69,12 +69,13 @@ public class DecisionAutomatonResult extends DecisionProblemResult {
 		}
 		else if (automaton instanceof PushdownAutomaton) {
 			sim = new PDAStepWithClosureSimulator(automaton);
+			((PDAStepWithClosureSimulator) sim).setAcceptByFinalState();
 		}
 		else if (automaton instanceof TuringMachine) {
 			sim = new TMSimulator(automaton);
 		}
 		try {
-			sim.simulateInput("00110");
+			test(new TestCase<Boolean>("00110", true));
 		} catch (NullPointerException e) {
 			if (sim == null)
 				throw e;

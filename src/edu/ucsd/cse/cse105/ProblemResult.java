@@ -24,7 +24,12 @@ public abstract class ProblemResult {
 		return problem_grader.getFileName();
 	}
 	
-	public abstract String getFeedback();
+	public String getFeedback() {
+		if (isMissing())
+			return "\\n\tFile is missing.";
+		else
+			return "";
+	}
 	
 	protected void throwMissingFileException() {
 		if (isMissing())

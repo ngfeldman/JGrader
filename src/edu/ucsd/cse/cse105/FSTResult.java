@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 import automata.mealy.MealyConfiguration;
 import automata.mealy.MealyMachine;
+import automata.mealy.MealyNondeterminismDetector;
 import automata.mealy.MealyStepByStateSimulator;
 import file.ParseException;
 import file.XMLCodec;
@@ -40,7 +41,13 @@ public class FSTResult extends TestSuiteResult<String> {
 			testable = true;
 			automaton = (MealyMachine) jff_obj;
 			actual_states = automaton.getStates().length;
+			MealyNondeterminismDetector mnd = new MealyNondeterminismDetector();
+			if (mnd.getNondeterministicStates(automaton).length > 0) {
+				testable = false;
+				feedback_prelude += "Not an FST: transducer is non-deterministic.";
+			}
 		}
+		
 		
 		if (testable) {
 			sim = new MealyStepByStateSimulator(automaton);
@@ -54,6 +61,8 @@ public class FSTResult extends TestSuiteResult<String> {
 			}
 		}
 		loadTestCaseResults();
+		sim = null;
+		automaton = null;
 	}
 
 	@Override

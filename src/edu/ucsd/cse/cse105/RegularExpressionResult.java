@@ -53,6 +53,7 @@ public class RegularExpressionResult extends DecisionProblemResult {
 			return;
 		}
 		testable = true;
+		loadTestCaseResults();
 	}
 	
 	@Override

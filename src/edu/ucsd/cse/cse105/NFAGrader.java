@@ -8,4 +8,8 @@ public class NFAGrader extends DecisionAutomatonGrader {
 		super(file_name, tests_file, test_info, line_number);
 	}
 	
+	@Override
+	public DFAResult grade(File file) {
+		return new DFAResult(this, file);
+	}
 }

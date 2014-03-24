@@ -14,6 +14,7 @@ public class EGrepResult extends DecisionProblemResult {
 	String regex;
 	boolean missing = true;
 	boolean testable = false;
+	String feedback_prelude = "";
 	
 	public EGrepResult(EGrepGrader problem_grader, File file) {
 		super(problem_grader, file);
@@ -44,7 +45,8 @@ public class EGrepResult extends DecisionProblemResult {
 		}
 		if (test(new TestCase<Boolean>("blah", true)) != null)
 			testable = true;
-		// TODO check for testable
+		else
+			feedback_prelude += "\\n\tproblem running egrep using your regular expression, most likely due to syntax error";
 		loadTestCaseResults();
 	}
 	
@@ -78,6 +80,11 @@ public class EGrepResult extends DecisionProblemResult {
 		}
 	}
 
+	@Override
+	public String getFeedback() {
+		return feedback_prelude + super.getFeedback();
+	}
+	
 	@Override
 	public boolean isMissing() {
 		return missing;

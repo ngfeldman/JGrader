@@ -3,6 +3,7 @@ package edu.ucsd.cse.cse105;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.LinkedList;
 
 public abstract class TestSuiteGrader<R> extends ProblemGrader implements Iterable<TestCase<R>>{
 
@@ -20,7 +21,21 @@ public abstract class TestSuiteGrader<R> extends ProblemGrader implements Iterab
 	protected ArrayList<TestCase<R>> loadTestCases(String[] test_info, int line_number) {
 		ArrayList<TestCase<R>> test_cases = new ArrayList<TestCase<R>>();
 		for (String line : test_info) {
-			String[] fields = line.split("\\s+");
+			String[] between_quotes = line.split("\"");
+			LinkedList<String> fields_list = new LinkedList<String>();
+			int start = (between_quotes.length > 0 && between_quotes[0].equals("")) ? 1 : 0;
+			for (int i=start; i<between_quotes.length; i++) {
+				if (i%2 == 0) {
+					String[] fields = between_quotes[i].trim().split("\\s+");
+					for (int j=0; j<fields.length; j++)
+						fields_list.add(fields[j]);
+				}
+				else {
+					fields_list.add(between_quotes[i].trim());
+				}
+			}
+			String[] fields = fields_list.toArray(new String[0]);
+			//String[] fields = line.split("\\s+");
 			for (int i=0; i<fields.length; i++)
 				if (fields[i].equals("!"))
 					fields[i] = "";
@@ -62,6 +77,10 @@ public abstract class TestSuiteGrader<R> extends ProblemGrader implements Iterab
 	
 	public ArrayList<TestCase<R>> getTestCases() {
 		return test_cases;
+	}
+	
+	public int size() {
+		return test_cases.size();
 	}
 	
 	/*
